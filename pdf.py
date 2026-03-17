@@ -4,9 +4,9 @@ Dependências para instalar o Software:
   pip install PyMuPDF Pillow opencv-python-headless imagehash scikit-image numpy
 
 Exemplos de uso:
-  python pdf_image_finder.py documento.pdf imagem_busca.png
-  python pdf_image_finder.py documento.pdf imagem_busca.jpg --threshold 0.85 --verbose
-  python pdf_image_finder.py documento.pdf imagem_busca.png --method orb
+  python  main.py documento.pdf imagem_busca.png
+  python main.py documento.pdf imagem_busca.jpg --threshold 0.85 --verbose
+  python main.py documento.pdf imagem_busca.png --method orb
 """
 
 import sys
@@ -59,7 +59,6 @@ ORB_MIN_MATCHES = 15
 PHASH_SIZE = 16
 
 
-# ── Utilitários ───────────────────────────────────────────────────────────────
 
 def pil_to_cv2(pil_img: Image.Image) -> np.ndarray:
     """Converte imagem PIL (RGB) para array OpenCV (BGR)."""
@@ -105,7 +104,7 @@ def extract_images_from_pdf(pdf_path: str, verbose: bool = False):
     total_images = 0
 
     if verbose:
-        print(f"📄  PDF carregado: {total_pages} página(s)")
+        print(f" PDF carregado: {total_pages} página(s)")
 
     for page_num in range(total_pages):
         page = doc[page_num]
@@ -121,7 +120,7 @@ def extract_images_from_pdf(pdf_path: str, verbose: bool = False):
 
                 if verbose:
                     w, h = img_pil.size
-                    print(f"   🖼  Página {page_num + 1}, imagem #{img_index + 1}  ({w}×{h}px)")
+                    print(f" Página {page_num + 1}, imagem #{img_index + 1}  ({w}×{h}px)")
 
                 yield (page_num + 1, img_index + 1, img_pil)
 
@@ -275,10 +274,10 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemplos:
-  python pdf_image_finder.py relatorio.pdf logo.png
-  python pdf_image_finder.py relatorio.pdf foto.jpg --threshold 0.80 --verbose
-  python pdf_image_finder.py relatorio.pdf imagem.png --method orb --threshold 0.70
-  python pdf_image_finder.py relatorio.pdf imagem.png --method all  --verbose
+  python main.py relatorio.pdf logo.png
+  python main.py relatorio.pdf foto.jpg --threshold 0.80 --verbose
+  python main.py relatorio.pdf imagem.png --method orb --threshold 0.70
+  python main.py relatorio.pdf imagem.png --method all  --verbose
         """,
     )
 
@@ -314,7 +313,7 @@ def print_result(result: dict, threshold: float) -> None:
     print(f"\n{sep}")
 
     if result["found"]:
-        print(f"✅IMAGEM ENCONTRADA NO PDF! ")
+        print(f"IMAGEM ENCONTRADA NO PDF! ")
         print(f"{sep}")
         pages = sorted(set(m["page"] for m in result["matches"]))
         print(f"Páginas: {', '.join(str(p) for p in pages)}")
@@ -366,7 +365,7 @@ def main() -> int:
         return 0 if result["found"] else 1
 
     except FileNotFoundError as e:
-        print(f"\n❌  Arquivo não encontrado: {e}", file=sys.stderr)
+        print(f"\n Arquivo não encontrado: {e}", file=sys.stderr)
         return 2
     except ValueError as e:
         print(f"\nErro de dados: {e}", file=sys.stderr)
