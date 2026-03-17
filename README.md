@@ -8,4 +8,4 @@ venv\Scripts\activate
 pip install PyMuPDF Pillow opencv-python-headless imagehash scikit-image numpy
 
 # Exemplo
-python main.py atarde.pdf imagem2.jpeg
+python main.py atarde.pdf imagem.jpeg
